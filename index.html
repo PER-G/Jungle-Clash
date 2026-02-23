@@ -51,7 +51,7 @@
 <div id="cap-d" class="hud"></div><div id="bot-d" class="hud"></div><div id="msg-d" class="hud"></div>
 <div id="ctrl-h" class="hud">WASD Bewegen · Maus Umsehen · Klick Angriff · SPACE Spezial · E Bot-Befehl</div>
 <div id="touch-c"><div id="joy-z"><div id="joy-b"><div id="joy-t"></div></div></div><div id="look-z"></div><div id="ba" class="tb">⚔️</div><div id="bs" class="tb">💥</div><div id="bb" class="tb">BOT</div></div>
-<div id="main-menu"><div class="ma">🐒 ⚔️ 🦁</div><div class="mt">JUNGLE CLASH</div><div class="ms">Affen vs. Löwen</div><button class="mb b1" onclick="teamSel('ctf')">🎮 Einzelspieler – CTF</button><button class="mb b2" onclick="teamSel('wave')">🌊 Rette die Tiere!</button><button class="mb b3">🌐 Multiplayer (Coming Soon)</button></div>
+<div id="main-menu"><div class="ma">🐒 ⚔️ 🦁</div><div class="mt">JUNGLE CLASH</div><div class="ms">Affen vs. Löwen</div><button class="mb b1" onclick="teamSel('ctf')">🎮 Einzelspieler – CTF</button><button class="mb b2" onclick="teamSel('wave')">🌊 Rette die Tiere!</button><button class="mb b3">🌐 Multiplayer (Coming Soon)</button><button class="mb" style="background:rgba(255,255,255,.15);margin-top:16px" onclick="goFS()">🔲 Vollbild</button></div>
 <div id="team-sel"><div class="tst">Wähle dein Team!</div><div class="tcw"><div class="tc tcm" onclick="pick('monkey')"><div class="te">🐒</div><div class="tn">Team Affe</div><div class="ts">⚡ Schnell & wendig<br>🍌 Bananenwurf<br>💚 3 KP</div></div><div class="tc tcl" onclick="pick('lion')"><div class="te">🦁</div><div class="tn">Team Löwe</div><div class="ts">💪 Stark & schnell<br>🦷 Prankenhieb<br>💛 3 KP</div></div></div><button class="bk" onclick="bkMenu()">← Zurück</button></div>
 <div id="death-s"><div class="dt">💀 K.O.!</div><div style="color:rgba(255,255,255,.7);margin-bottom:15px">Wiederbelebung...</div><div class="rt" id="rsp-t">5</div></div>
 <div id="win-s"><div class="wt" id="wt">🏆</div><div class="ws" id="wsub"></div><button class="mb b1" onclick="location.reload()">🔄 Nochmal</button></div>
@@ -60,6 +60,15 @@
 const MB=/Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile/i.test(navigator.userAgent)||('ontouchstart'in window&&innerWidth<1200);
 function chkO(){document.getElementById('rot-p').style.display=(MB&&innerHeight>innerWidth)?'flex':'none'}
 addEventListener('resize',chkO);addEventListener('orientationchange',()=>setTimeout(chkO,200));chkO();
+
+function goFS(){
+const el=document.documentElement;
+if(el.requestFullscreen)el.requestFullscreen().catch(()=>{});
+else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();
+else if(el.msRequestFullscreen)el.msRequestFullscreen();
+// Lock to landscape if supported
+if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('landscape').catch(()=>{});
+}
 let sc,cam,ren,clk,pl,pTm,gMd,keys={},pLk=false,yaw=0,pitch=0,gOn=false;
 let pjs=[],bts=[],ebs=[],pch=[],ans=[],MAP=200,H=100;
 let pHP=3,pSc=0,cA=0,cB=0,aCD=0,sCD=0,dbl=0,sB=0,sT=0;
@@ -470,7 +479,7 @@ for(const id of['hp-bar','score-d','team-d','ammo-d','bot-d'])document.getElemen
 document.getElementById('crosshair').style.display=MB?'none':'block';document.getElementById('ctrl-h').style.display=MB?'none':'block';
 document.getElementById('touch-c').style.display=MB?'block':'none';
 if(MB){document.getElementById('ba').textContent=pTm==='monkey'?'🍌':'🦷';document.getElementById('bs').textContent=pTm==='monkey'?'🥥':'🦁';document.getElementById('bb').textContent='FOL'}
-gOn=true;initAudio();startMusic();loop();if(!MB)setTimeout(()=>ren.domElement.requestPointerLock(),500)}
+gOn=true;initAudio();startMusic();if(MB)goFS();loop();if(!MB)setTimeout(()=>ren.domElement.requestPointerLock(),500)}
 
 function nW(){cW++;if(cW>3){shW('🏆 TIERE GERETTET!',`Alle 3 Wellen!\nPunkte: ${pSc}`);return}
 const ct=[3,5,8];wL=ct[cW-1];wA=true;sfx('wave');shM(`WELLE ${cW} – ${wL} Wilderer!`,3000);
